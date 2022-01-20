@@ -13,12 +13,12 @@ def setup():
 def main(argv):
     setup()
     while (True):
-        pag.write("hello world")
         pag.screenshot('test.png')
         for dinoPic in os.listdir("./dinoPictures/"):
             if dinoPic.endswith(".png"):
                 dinoPos = (pag.locateOnScreen("./dinoPictures/"+dinoPic, confidence=0.9))
-                pag.click(dinoPos[0],dinoPos[1])
+                if (dinoPos):
+                    pag.click(dinoPos[0],dinoPos[1])
         time.sleep(2)
 
 
