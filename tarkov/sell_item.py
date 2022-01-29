@@ -5,30 +5,15 @@ import os
 import sys
 
 """
-recording of actions
-(1278, 78) === add offer
-(785, 234) ===  autoselect
-(597, 213) === select item top left
-(1629, 496) === select barter
-(979, 196) === money input field
-
--- type price
-(957, 898) === press add
-(1446, 863) === place order
-
-(517, 37)
-(41, 95)
-(1060, 372)
-(981, 196)
-(940, 903)
-(849, 744)
+(1272, 1059) move to fleamarket
+(950, 1063) move to stash
 """
 
 def setup():
     pag.FAILSAFE = False
     screenWidth, screenHeight = pag.size()
     pag.PAUSE = 0.00005
-    time.sleep(2)
+    time.sleep(0.1)
     print('Setup complete')
 
 def print_mouse():
@@ -38,13 +23,13 @@ def print_mouse():
         try:
             print(pag.position())
             f.write(str(pag.position())+',')
-            time.sleep(10)
+            time.sleep(5)
         except KeyboardInterrupt:
             print("done")
             f.close()
             sys.exit()
         
-def make_offer(price):
+def make_offer(price): #makes offer for given price of the top left item in the stash
     posList = [(1278,78), # add offer
                 (517, 37), # autoselect
                 (41, 95), # select item top left
@@ -55,21 +40,24 @@ def make_offer(price):
     
     for i in range(len(posList)):
         if (i == 1): # move window
+            time.sleep(0.1)
             offer_screen_pos = pag.center(pag.locateOnScreen('./imgs/offerscreen.png',confidence=0.9))
             pag.moveTo(offer_screen_pos)
-            pag.dragTo(0, 0, 1, button='left')
+            pag.dragTo(0, 0, 0.1, button='left')
         if (i == 5):
-            pag.write(price, interval=0.1)
+            pag.write(price, interval=0.01)
         pag.moveTo(posList[i])
         pag.click()
         print(pag.position())
-        time.sleep(2)
+        time.sleep(0.1)
         
 def move_to_fleamarket():
-    pass
+    pag.click(1272, 1059)
+    time.sleep(0.1)
 
 def move_to_stash():
-    pass
+    pag.click(950, 1063)
+    time.sleep(0.1)
 
 def main(argv):
     setup()

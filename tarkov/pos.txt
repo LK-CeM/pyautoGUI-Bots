@@ -1,7 +1,1 @@
-Point(x=517, y=37)
-Point(x=41, y=95)
-Point(x=1060, y=372)
-Point(x=981, y=196)
-Point(x=940, y=903)
-Point(x=849, y=744)
-Point(x=849, y=744)
+Point(x=-1750, y=707),Point(x=1272, y=1059),Point(x=950, y=1063),
