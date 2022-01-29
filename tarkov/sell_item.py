@@ -45,7 +45,6 @@ def print_mouse():
             sys.exit()
         
 def make_offer(price):
-
     posList = [(1278,78), # add offer
                 (517, 37), # autoselect
                 (41, 95), # select item top left
@@ -66,7 +65,11 @@ def make_offer(price):
         print(pag.position())
         time.sleep(2)
         
+def move_to_fleamarket():
+    pass
 
+def move_to_stash():
+    pass
 
 def main(argv):
     setup()
@@ -74,7 +77,9 @@ def main(argv):
     if (argv[1]== '-pm'):#print mouse
         print_mouse()
     else:
+        move_to_fleamarket()
         make_offer(argv[1])
+        move_to_stash()
 
 
 if __name__ == "__main__":
