@@ -6,22 +6,29 @@ import sys
 
 """
 recording of actions
-Point(1278, 78) === add offer
--- mising autoselect
-Point(597, 213) === select item top left
-Point(1629, 496) === select barter
-Point(979, 196) === money input field
+(1278, 78) === add offer
+(785, 234) ===  autoselect
+(597, 213) === select item top left
+(1629, 496) === select barter
+(979, 196) === money input field
 
 -- type price
-Point(957, 898) === press add
-Point(1446, 863) === place order
+(957, 898) === press add
+(1446, 863) === place order
+
+(517, 37)
+(41, 95)
+(1060, 372)
+(981, 196)
+(940, 903)
+(849, 744)
 """
 
 def setup():
-    pag.FAILSAFE = True
+    pag.FAILSAFE = False
     screenWidth, screenHeight = pag.size()
     pag.PAUSE = 0.00005
-    time.sleep(10)
+    time.sleep(2)
     print('Setup complete')
 
 def print_mouse():
@@ -30,7 +37,7 @@ def print_mouse():
     while(True):
         try:
             print(pag.position())
-            f.write(str(pag.position()) + '\n')
+            f.write(str(pag.position())+',')
             time.sleep(10)
         except KeyboardInterrupt:
             print("done")
@@ -38,12 +45,24 @@ def print_mouse():
             sys.exit()
         
 def make_offer(price):
-    posList = [(1278,78),(597, 213),(1629, 496),(979, 196),(957, 898),(1446, 863)]
+
+    posList = [(1278,78), # add offer
+                (517, 37), # autoselect
+                (41, 95), # select item top left
+                (1060, 372), # select barter
+                (981, 196), # money input field
+                (940, 903), # press add
+                (849, 744)] # place order
+    
     for i in range(len(posList)):
-        if (i == 4):
+        if (i == 1): # move window
+            offer_screen_pos = pag.center(pag.locateOnScreen('./imgs/offerscreen.png',confidence=0.9))
+            pag.moveTo(offer_screen_pos)
+            pag.dragTo(0, 0, 1, button='left')
+        if (i == 5):
             pag.write(price, interval=0.1)
-            time.sleep(0.1)
-        pag.click(posList[i])
+        pag.moveTo(posList[i])
+        pag.click()
         print(pag.position())
         time.sleep(2)
         
