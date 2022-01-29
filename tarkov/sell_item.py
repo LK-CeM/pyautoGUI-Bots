@@ -40,10 +40,10 @@ def make_offer(price): #makes offer for given price of the top left item in the 
     
     for i in range(len(posList)):
         if (i == 1): # move window
-            time.sleep(0.1)
             offer_screen_pos = pag.center(pag.locateOnScreen('./imgs/offerscreen.png',confidence=0.9))
             pag.moveTo(offer_screen_pos)
             pag.dragTo(0, 0, 0.1, button='left')
+            time.sleep(0.1)
         if (i == 5):
             pag.write(price, interval=0.01)
         pag.moveTo(posList[i])
@@ -65,6 +65,7 @@ def main(argv):
     if (argv[1]== '-pm'):#print mouse
         print_mouse()
     else:
+        move_to_stash()
         move_to_fleamarket()
         make_offer(argv[1])
         move_to_stash()
