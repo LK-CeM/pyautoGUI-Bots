@@ -7,6 +7,33 @@ import sys
 """
 (1272, 1059) move to fleamarket
 (950, 1063) move to stash
+
+TO DO:
+Autodetect price of item:
+    - right click item
+    - press 'filter by item'
+    - screenshot price area
+    - read price from screenshot
+    - clean data
+    - make offer at .99 of cheapest price
+    - return to stash
+
+autodect open offers:
+    - go to fleamarket
+    - screenshot open offers area
+    - read single char
+    - if 2 - sleep 5 secs
+    - else can_sell_item = True
+
+autosort inventory:
+    - check if top left has sellable item
+    - if so : return
+    - else : 
+        - find sellable item
+        - put item in top left: #condition top left is empty 
+            - check size of item (for ex. 1x2)
+            - make space in top left ()
+        
 """
 def clean_string(str):
     cleaned_string = ""
@@ -46,15 +73,21 @@ def make_offer(price): #makes offer for given price of the top left item in the 
     
     for i in range(len(posList)):
         if (i == 1): # move window
-            offer_screen_pos = pag.center(pag.locateOnScreen('./imgs/offerscreen.png',confidence=0.9))
-            pag.moveTo(offer_screen_pos)
-            pag.dragTo(0, 0, 0.1, button='left')
             time.sleep(0.1)
+            try:
+                offer_screen_pos = pag.center(pag.locateOnScreen('./imgs/offerscreen.png',confidence=0.9))
+            except:
+                print("cant find offerscreen")
+            if (offer_screen_pos[0] != 45):
+                print("moving window to top left corner...")
+                pag.moveTo(offer_screen_pos)
+                pag.dragTo(0, 0, 1, button='left')
+                time.sleep(0.1)
+                
         if (i == 5):
             pag.write(price, interval=0.01)
         pag.moveTo(posList[i])
         pag.click()
-        print(pag.position())
         time.sleep(0.1)
         
 def move_to_fleamarket():
