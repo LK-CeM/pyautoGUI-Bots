@@ -74,10 +74,7 @@ def make_offer(price): #makes offer for given price of the top left item in the 
     for i in range(len(posList)):
         if (i == 1): # move window
             time.sleep(0.1)
-            try:
-                offer_screen_pos = pag.center(pag.locateOnScreen('./imgs/offerscreen.png',confidence=0.9))
-            except:
-                print("cant find offerscreen")
+            offer_screen_pos = pag.center(pag.locateOnScreen('./imgs/offerscreen.png',confidence=0.85))
             if (offer_screen_pos[0] != 45):
                 print("moving window to top left corner...")
                 pag.moveTo(offer_screen_pos)
