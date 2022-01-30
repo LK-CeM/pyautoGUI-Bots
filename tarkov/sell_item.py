@@ -8,6 +8,12 @@ import sys
 (1272, 1059) move to fleamarket
 (950, 1063) move to stash
 """
+def clean_string(str):
+    cleaned_string = ""
+    for c in str:
+        if c.isdigit() or c == ',':
+            cleaned_string += c
+    return cleaned_string
 
 def setup():
     pag.FAILSAFE = False
@@ -22,7 +28,7 @@ def print_mouse():
     while(True):
         try:
             print(pag.position())
-            f.write(str(pag.position())+',')
+            f.write(clean_string(str(pag.position()))+' , ')
             time.sleep(5)
         except KeyboardInterrupt:
             print("done")
