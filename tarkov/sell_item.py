@@ -5,7 +5,7 @@ import os
 import sys
 
 try:
-    from PIL import Image
+    from PIL import Image, ImageOps
 except ImportError:
     import Image
 
@@ -58,7 +58,6 @@ def setup():
     print('Setup complete')
 
 def can_make_offer():
-    pag.moveTo(0,0) #get mouse out of screenshot
     im = pag.screenshot(region=(420,45, 12, 20)) #open offers
     string_from_img = pytesseract.image_to_string(im, config=("-c tessedit"
                     "_char_whitelist=0123456789" #abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
@@ -77,13 +76,27 @@ def can_make_offer():
 
 def read_price_from_img():
     pag.moveTo(0,0) #get mouse out of screenshot
-    im = pag.screenshot(region=(1367,159, 80, 30))
+    im = pag.screenshot(region=(1363,159, 82, 30))
+    im = ImageOps.grayscale(im)
     string_from_img = pytesseract.image_to_string(im)
     cleaned_string = ""
     for c in string_from_img:
         if c.isdigit():
             cleaned_string += c
-    return cleaned_string
+    print("string from normal: ", cleaned_string)
+
+    im2 = ImageOps.invert(im)
+    string_from_img = pytesseract.image_to_string(im)
+    cleaned_string2 = ""
+    for c in string_from_img:
+        if c.isdigit():
+            cleaned_string2 += c
+    print("string from invert: ", cleaned_string2)
+
+    if (cleaned_string2 == cleaned_string):
+        return cleaned_string
+    else:
+        return ""
 
 def navigate_stash():
     """
@@ -121,7 +134,7 @@ def navigate_stash():
             time.sleep(0.5)
             while(not can_make_offer()):
                 print("can't make offer... waiting.....")
-                time.sleep(10)
+                time.sleep(1)
             price = read_price_from_img()
             if (not price or int(price) < 5000 or int(price) > 100000):
                 print("bad price -> skiping item")
@@ -129,7 +142,7 @@ def navigate_stash():
                 move_to_stash()
                 continue
             #print("could make offer at marketprice -1: ",int(price)-1)
-            make_offer(str(int(price)-1001),i*item_size[0],j*item_size[1])
+            make_offer(str(int(price)-11),i*item_size[0],j*item_size[1])
             items_found += 1
 
             move_to_stash()
