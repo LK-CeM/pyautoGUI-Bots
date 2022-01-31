@@ -92,7 +92,7 @@ def navigate_stash():
     """
     print('nav stash...')
     item_size = (64,64)
-    rows = 2
+    rows = 2 #max can be 11 rn now (without scrolling)
     columns = 10
     items_found = 0
     items_skipped = 0
@@ -123,7 +123,7 @@ def navigate_stash():
                 print("can't make offer... waiting.....")
                 time.sleep(10)
             price = read_price_from_img()
-            if (not price or int(price) < 5000):
+            if (not price or int(price) < 5000 or int(price) > 100000):
                 print("bad price -> skiping item")
                 items_skipped += 1
                 move_to_stash()
