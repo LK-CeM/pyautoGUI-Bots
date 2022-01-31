@@ -13,10 +13,10 @@ pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tessera
 #string_from_img = pytesseract.image_to_string(Image.open('./imgs/test.png'))
 418,43
 #im = pyautogui.screenshot(region=(1367,159, 80, 30)) #price of item
-im = pyautogui.screenshot(region=(422,45, 12, 20)) #open offers
+im = pyautogui.screenshot(region=(420,45, 12, 20)) #open offers
 im.show()
 string_from_img = pytesseract.image_to_string(im, config=("-c tessedit"
-                  "_char_whitelist=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+                  "_char_whitelist=0123456789" #abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
                   " --psm 10"
                   " -l osd"
                   " ")) #this reads a single char

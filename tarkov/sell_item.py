@@ -4,6 +4,13 @@ import sys
 import os
 import sys
 
+try:
+    from PIL import Image
+except ImportError:
+    import Image
+
+import pytesseract
+
 """
 (1272, 1059) move to fleamarket
 (950, 1063) move to stash
@@ -46,12 +53,94 @@ def setup():
     pag.FAILSAFE = False
     screenWidth, screenHeight = pag.size()
     pag.PAUSE = 0.00005
+    pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract'
     time.sleep(0.1)
     print('Setup complete')
+
+def can_make_offer():
+    pag.moveTo(0,0) #get mouse out of screenshot
+    im = pag.screenshot(region=(420,45, 12, 20)) #open offers
+    string_from_img = pytesseract.image_to_string(im, config=("-c tessedit"
+                    "_char_whitelist=0123456789" #abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+                    " --psm 10"
+                    " -l osd"
+                    " ")) #this reads a single char
+    print("open offers are: ",string_from_img)
+    cleaned_string = ""
+    for c in string_from_img:
+        if c.isdigit():
+            cleaned_string += c             
+    if (cleaned_string != "0" and cleaned_string != "3"):
+        print("open offers are more then 1, offers found: ", cleaned_string)
+        return False
+    return True
+
+def read_price_from_img():
+    pag.moveTo(0,0) #get mouse out of screenshot
+    im = pag.screenshot(region=(1367,159, 80, 30))
+    string_from_img = pytesseract.image_to_string(im)
+    cleaned_string = ""
+    for c in string_from_img:
+        if c.isdigit():
+            cleaned_string += c
+    return cleaned_string
+
+def navigate_stash():
+    """
+    requires filter for fleamarket to be set correctly to avoid problems with $ prices --- see ./imgs/filter_condition
+    requires that items to be sold are in the top rows of the stash
+    """
+    print('nav stash...')
+    item_size = (64,64)
+    rows = 2
+    columns = 10
+    items_found = 0
+    items_skipped = 0
+    #startpoint = (1293,103,1)
+    filter_by_item_offset = (1352-1293, 180-123)
+    for j in range(rows):
+        for i in range(columns):
+            print("i is: ", i, " j is: ", j)
+            pag.moveTo(1293,103,0.1)
+            time.sleep(0.1)
+            pag.move(i*item_size[0],j*item_size[1],0.1)
+            time.sleep(0.1)
+            pag.click(button='right')
+            time.sleep(0.1)
+            search_img = pag.locateOnScreen('./imgs/filter_by_item.png',confidence=0.85)
+            print("search image is: ",search_img)
+            if (search_img):
+                filter_pos = pag.center(search_img)
+            else:
+                print("can't find item-> skiping")
+                items_skipped += 1
+                continue
+            pag.moveTo(filter_pos)
+            time.sleep(0.2)
+            pag.click()
+            time.sleep(0.5)
+            while(not can_make_offer()):
+                print("can't make offer... waiting.....")
+                time.sleep(10)
+            price = read_price_from_img()
+            if (not price or int(price) < 5000):
+                print("bad price -> skiping item")
+                items_skipped += 1
+                move_to_stash()
+                continue
+            #print("could make offer at marketprice -1: ",int(price)-1)
+            make_offer(str(int(price)-1001),i*item_size[0],j*item_size[1])
+            items_found += 1
+
+            move_to_stash()
+    print("items found: ", items_found)
+    print("items skipped: ", items_skipped)
+
 
 def print_mouse():
     file = "pos.txt"
     f = open(file, 'a')
+    time.sleep(5)
     while(True):
         try:
             print(pag.position())
@@ -62,10 +151,10 @@ def print_mouse():
             f.close()
             sys.exit()
         
-def make_offer(price): #makes offer for given price of the top left item in the stash
+def make_offer(price,x_off, y_off): #makes offer for given price of the top left item in the stash
     posList = [(1278,78), # add offer
                 (517, 37), # autoselect
-                (41, 95), # select item top left
+                (41+x_off, 95+y_off), # select item top left
                 (1060, 372), # select barter
                 (981, 196), # money input field
                 (940, 903), # press add
@@ -98,7 +187,10 @@ def move_to_stash():
 def main(argv):
     setup()
     pause = False
-    if (argv[1]== '-pm'):#print mouse
+    if (argv[1]== '-ns'):#nav stash
+        navigate_stash()
+        return
+    elif (argv[1]== '-pm'):#print mouse
         print_mouse()
     else:
         move_to_stash()
