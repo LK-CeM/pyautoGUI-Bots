@@ -105,7 +105,7 @@ def navigate_stash():
     """
     print('nav stash...')
     item_size = (64,64)
-    rows = 2 #max can be 11 rn now (without scrolling)
+    rows = 4 #max can be 11 rn now (without scrolling)
     columns = 10
     items_found = 0
     items_skipped = 0
