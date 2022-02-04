@@ -105,7 +105,7 @@ def navigate_stash():
     """
     print('nav stash...')
     item_size = (64,64)
-    rows = 4 #max can be 11 rn now (without scrolling)
+    rows = 2 #max can be 11 rn now (without scrolling)
     columns = 10
     items_found = 0
     items_skipped = 0
@@ -206,10 +206,7 @@ def main(argv):
     elif (argv[1]== '-pm'):#print mouse
         print_mouse()
     else:
-        move_to_stash()
-        move_to_fleamarket()
-        make_offer(argv[1])
-        move_to_stash()
+        navigate_stash()
 
 
 if __name__ == "__main__":
