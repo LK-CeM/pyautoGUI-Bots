@@ -98,20 +98,20 @@ def read_price_from_img():
     else:
         return ""
 
-def navigate_stash():
+def navigate_stash(row_count = 2):
     """
     requires filter for fleamarket to be set correctly to avoid problems with $ prices --- see ./imgs/filter_condition
-    requires that items to be sold are in the top rows of the stash
+    requires that items to be sold are in the top row_counts of the stash
     """
     print('nav stash...')
     item_size = (64,64)
-    rows = 2 #max can be 11 rn now (without scrolling)
+    #row_count = 2 #max can be 11 rn now (without scrolling)
     columns = 10
     items_found = 0
     items_skipped = 0
     #startpoint = (1293,103,1)
     filter_by_item_offset = (1352-1293, 180-123)
-    for j in range(rows):
+    for j in range(row_count):
         for i in range(columns):
             print("i is: ", i, " j is: ", j)
             pag.moveTo(1293,103,0.1)
@@ -132,11 +132,15 @@ def navigate_stash():
             time.sleep(0.2)
             pag.click()
             time.sleep(0.5)
+            wait_counter = 0
             while(not can_make_offer()):
                 print("can't make offer... waiting.....")
+                wait_counter += 1
                 time.sleep(1)
+                if (wait_counter == 20):
+                    return
             price = read_price_from_img()
-            if (not price or int(price) < 5000 or int(price) > 100000):
+            if (not price or int(price) < 5000 or int(price) > 50000):
                 print("bad price -> skiping item")
                 items_skipped += 1
                 move_to_stash()
@@ -202,7 +206,7 @@ def main(argv):
     pause = False
     if (len(argv) > 1):
         if (argv[1]== '-ns'):#nav stash
-            navigate_stash()
+            navigate_stash(int(argv[2]))
             return
         elif (argv[1]== '-pm'):#print mouse
             print_mouse()
