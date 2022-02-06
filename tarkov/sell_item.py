@@ -54,7 +54,7 @@ def setup():
     screenWidth, screenHeight = pag.size()
     pag.PAUSE = 0.00005
     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract'
-    time.sleep(0.1)
+    time.sleep(4)
     print('Setup complete')
 
 def can_make_offer():
@@ -200,11 +200,12 @@ def move_to_stash():
 def main(argv):
     setup()
     pause = False
-    if (argv[1]== '-ns'):#nav stash
-        navigate_stash()
-        return
-    elif (argv[1]== '-pm'):#print mouse
-        print_mouse()
+    if (len(argv) > 1):
+        if (argv[1]== '-ns'):#nav stash
+            navigate_stash()
+            return
+        elif (argv[1]== '-pm'):#print mouse
+            print_mouse()
     else:
         navigate_stash()
 
