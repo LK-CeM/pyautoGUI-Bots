@@ -3,6 +3,7 @@ import time
 import sys
 import os
 import sys
+from playsound import playsound
 
 try:
     from PIL import Image, ImageOps
@@ -138,6 +139,8 @@ def navigate_stash(row_count = 2):
                 wait_counter += 1
                 time.sleep(1)
                 if (wait_counter == 20):
+                    print('waited to long - done')
+                    playsound('bonk.mp3')
                     return
             price = read_price_from_img()
             if (not price or int(price) < 5000 or int(price) > 50000):
@@ -216,4 +219,5 @@ def main(argv):
 
 if __name__ == "__main__":
     main(sys.argv)
+    playsound('bonk.mp3')
 
