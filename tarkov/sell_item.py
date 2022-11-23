@@ -111,7 +111,7 @@ def navigate_stash(row_count = 2):
     items_found = 0
     items_skipped = 0
     #startpoint = (1293,103,1)
-    filter_by_item_offset = (1352-1293, 180-123)
+    filter_by_item_offset = (60, 60)
     for j in range(row_count):
         for i in range(columns):
             print("i is: ", i, " j is: ", j)
@@ -132,15 +132,15 @@ def navigate_stash(row_count = 2):
             pag.moveTo(filter_pos)
             time.sleep(0.2)
             pag.click()
-            time.sleep(0.5)
+            time.sleep(1)
             wait_counter = 0
             while(not can_make_offer()):
-                print("can't make offer... waiting.....")
+                #print("can't make offer... waiting.....")
                 wait_counter += 1
                 time.sleep(1)
-                if (wait_counter == 20):
+                if (wait_counter == 360):
                     print('waited to long - done')
-                    playsound('bonk.mp3')
+                   ## playsound('bonk.mp3')
                     return
             price = read_price_from_img()
             if (not price or int(price) < 5000 or int(price) > 50000):
@@ -171,10 +171,10 @@ def print_mouse():
             f.close()
             sys.exit()
         
-def make_offer(price,x_off, y_off): #makes offer for given price of the top left item in the stash
-    posList = [(1278,78), # add offer
-                (517, 37), # autoselect
-                (41+x_off, 95+y_off), # select item top left
+def make_offer(price,x,y): #makes offer for given price of the top left item in the stash
+    posList = [(1220,80), # add offer
+                (482, 40), # autoselect
+                (30 +x, 90 +y), # select item
                 (1060, 372), # select barter
                 (981, 196), # money input field
                 (940, 903), # press add
@@ -183,41 +183,50 @@ def make_offer(price,x_off, y_off): #makes offer for given price of the top left
     for i in range(len(posList)):
         if (i == 1): # move window
             time.sleep(0.1)
-            offer_screen_pos = pag.center(pag.locateOnScreen('./imgs/offerscreen.png',confidence=0.85))
-            if (offer_screen_pos[0] != 45):
-                print("moving window to top left corner...")
-                pag.moveTo(offer_screen_pos)
-                pag.dragTo(0, 0, 1, button='left')
-                time.sleep(0.1)
+            # cant find that img - removed for now --> screen needs 2 be in pos for bot to work
+            #offer_screen_pos = pag.center(pag.locateOnScreen('./imgs/offerscreen_new.png',confidence=0.80))
+            #if (offer_screen_pos[0] != 45):
+            #    print("moving window to top left corner...")
+            #    pag.moveTo(offer_screen_pos)
+            #    pag.dragTo(0, 0, 1, button='left')
+            #    time.sleep(0.1)
                 
         if (i == 5):
             pag.write(price, interval=0.01)
         pag.moveTo(posList[i])
         pag.click()
-        time.sleep(0.1)
+        time.sleep(0.3)
         
 def move_to_fleamarket():
+    time.sleep(1)
     pag.click(1272, 1059)
-    time.sleep(0.1)
+    time.sleep(1)
 
 def move_to_stash():
+    time.sleep(1)
     pag.click(950, 1063)
-    time.sleep(0.1)
+    time.sleep(1)
+
+def help():
+    print("change the filtersettings on the flee to the screenshot in imgs. Put add offer in the top left corner. usage: \n -ns 2  // navigate stash to sell all items of the the first 2 rows")
 
 def main(argv):
-    setup()
     pause = False
     if (len(argv) > 1):
         if (argv[1]== '-ns'):#nav stash
+            setup()
             navigate_stash(int(argv[2]))
             return
         elif (argv[1]== '-pm'):#print mouse
+            setup()
             print_mouse()
+        elif (argv[1]== '-h' or argv[1]== '-help'):
+            help()
     else:
-        navigate_stash()
+        help()
 
 
 if __name__ == "__main__":
     main(sys.argv)
-    playsound('bonk.mp3')
+  ##  playsound('bonk.mp3')
 
