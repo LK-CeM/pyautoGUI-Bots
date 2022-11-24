@@ -13,6 +13,7 @@ pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tessera
 #string_from_img = pytesseract.image_to_string(Image.open('./imgs/test.png'))
 418,43
 #im = pyautogui.screenshot(region=(1367,159, 80, 30)) #price of item
+#pyautogui.displayMousePosition()
 im = pyautogui.screenshot(region=(420,45, 12, 20)) #open offers
 im.show()
 string_from_img = pytesseract.image_to_string(im, config=("-c tessedit"
