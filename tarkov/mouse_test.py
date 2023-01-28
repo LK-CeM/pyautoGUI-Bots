@@ -1,71 +1,43 @@
 import pyautogui as pag
 import time
 import sys
+import keyboard
+import win32gui, win32ui, win32con, win32api
 
-
-last_raid = 146000
-last_skips = 16
-last_raid = 126000
-last_skips2 = 15
-last_raid = 53000
-last_raid = 104000  
-last_raid = 51000
-
-def skip_raid():
-    time.sleep(2)
-    skipC = 0
-    while (True):
-        pag.press('tab')
-        time.sleep(2)
-        pag.moveTo(1690, 956)
-        pag.click()
-        time.sleep(1.5)
-        pag.moveTo(844, 810) #old was 857
-        pag.click()
-        time.sleep(0.5)
-        pag.moveTo(951, 860)
-        pag.click()
-        time.sleep(0.5)
-        pag.moveTo(951, 860)
-        pag.click()
-        time.sleep(12)
-        pag.press('esc')
-        time.sleep(1)
-        pag.moveTo(946, 716)
-        pag.click()
-        time.sleep(1)
-        pag.moveTo(869, 614)
-        pag.click()
-        time.sleep(14)
-        skipC += 1
-        print(" raids skiped: ", skipC)
-    
 
 
 def main(argv):
-    skip_raid()
-    #print_mouse()
+    while(True):
+        if (keyboard.is_pressed('p')):
+            playback("junkbox_top_left.txt")
+        if (keyboard.is_pressed('r')):
+            record_mouse()
+        if (keyboard.is_pressed('e')):
+            exit()
 
-def clean_string(str):
-    cleaned_string = ""
-    for c in str:
-        if c.isdigit() or c == ',':
-            cleaned_string += c
-    return cleaned_string
+def playback(file):
+    f = open(file, "r")
+    lines = f.readlines()
+    test = [[int(j) for j in x.split()] for x in lines]
+    test = test[0]
+    home = [test[0],test[1]]
+    pag.moveTo(test[0],test[1])
+    for i in range(2,len(test),2):
+        pag.moveTo(test[i], test[i+1])
+        pag.mouseDown()
+        pag.moveTo(home[0], home[1])
+        pag.mouseUp()
 
-def print_mouse():
+
+
+def record_mouse():
     file = "pos.txt"
     f = open(file, 'a')
-    time.sleep(5)
     while(True):
-        try:
+        if (keyboard.is_pressed('a')):
             print(pag.position())
-            f.write(clean_string(str(pag.position()))+' , ')
-            time.sleep(1)
-        except KeyboardInterrupt:
-            print("done")
-            f.close()
-            sys.exit()
+            f.write(str(pag.position()[0])+" "+ str(pag.position()[1])+" ")
+            time.sleep(0.2)
 
 if __name__ == "__main__":
     main(sys.argv)
