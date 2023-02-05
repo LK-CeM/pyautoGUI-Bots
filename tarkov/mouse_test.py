@@ -20,15 +20,30 @@ def main(argv):
             set_price()
         elif (keyboard.is_pressed('d') and keyboard.is_pressed('alt')):
             quick_sell()
+        elif (keyboard.is_pressed('v') and keyboard.is_pressed('alt')):
+            snipe()
+
+def snipe(): #1777 180
+    while(True):
+        noffer = pag.locateOnScreen('./imgs/no_offer.png', confidence=0.8, grayscale=True)
+        if (not noffer):
+            pag.click(1777 , 180)
+            pag.press("y")
+            pag.moveTo(111, 111)
+            pag.press("f5")
+            continue
+        time.sleep(1)
+        pag.press("f5")
 
 def set_price(): #sale window top left corner
     org_pos = pag.position()
     pag.click(button='right')
     pag.moveTo(pag.locateOnScreen('./imgs/filter_by_item.png', confidence=0.8))
     pag.click()
-    pag.click(480, 39) #select all
+    if (pag.locateOnScreen('./imgs/autoselect_off.png', confidence=0.9)):
+        pag.click(485, 45) #select all
     pag.click(org_pos) #item
-    time.sleep(0.1)
+    time.sleep(0.6)
     pag.click(1052, 372)
     pag.click(996, 199)
 
@@ -38,7 +53,10 @@ def quick_sell(): #sale window top left corner
     time.sleep(0.5)
     pag.click(1228, 78)
     pag.moveTo(302, 405)
-   
+    pos = pag.locateOnScreen('./imgs/found_in_raid.png', confidence=0.8)
+    pag.moveTo(pos)
+    if (pos):
+        set_price()
 
 def change_pos(x, y):
     pos = list(pag.position())
@@ -55,7 +73,7 @@ def repair(): #1432 101, 1481 230, 981 906
     pag.click()
     pag.moveTo((981,  906))
     pag.click()
-    time.sleep(0.15)
+    time.sleep(0.01)
     pag.press("esc")
     pag.moveTo(org_pos)
 
@@ -72,9 +90,6 @@ def playback(file):
         pag.mouseDown()
         pag.moveTo(home[0], home[1])
         pag.mouseUp()
-
-
-
 
 def record_mouse(): #press a to record pos
     print("start recording...")
