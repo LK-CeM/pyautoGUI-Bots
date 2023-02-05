@@ -8,14 +8,35 @@ import win32gui, win32ui, win32con, win32api
 
 def main(argv):
     while(True):
-        if (keyboard.is_pressed('p')and keyboard.is_pressed('alt')):
-            playback("junkbox_top_left.txt")
-        if (keyboard.is_pressed('r') and keyboard.is_pressed('alt')):
-            record_mouse()
+        if (keyboard.is_pressed('p') and keyboard.is_pressed('alt')):
+            playback("junkbox_top_left.txt") #playback filling junkbox that is in the top left corner of the screen
+        elif (keyboard.is_pressed('r') and keyboard.is_pressed('alt')):
+            record_mouse() # print mouseposition and safe 2 file when pressing 'a'
         elif (keyboard.is_pressed('f')):
-            exit()
-        elif (keyboard.is_pressed('e')):
-            repair()
+            exit() 
+        elif (keyboard.is_pressed('e') and keyboard.is_pressed('alt')):
+            repair() #macro repair
+        elif (keyboard.is_pressed('s') and keyboard.is_pressed('alt')):
+            set_price()
+        elif (keyboard.is_pressed('d') and keyboard.is_pressed('alt')):
+            quick_sell()
+
+def set_price(): #sale window top left corner
+    org_pos = pag.position()
+    pag.click(button='right')
+    pag.moveTo(pag.locateOnScreen('./imgs/filter_by_item.png', confidence=0.8))
+    pag.click()
+    pag.click(480, 39) #select all
+    pag.click(org_pos) #item
+    #time.sleep(0.15)
+    pag.click(1052, 372)
+    pag.click(996, 199)
+
+def quick_sell(): #sale window top left corner
+    pag.click(971, 897)
+    pag.click(892, 747)
+    pag.click(1228, 78)
+   
 
 def change_pos(x, y):
     pos = list(pag.position())
