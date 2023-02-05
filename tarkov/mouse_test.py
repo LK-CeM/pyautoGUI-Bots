@@ -28,14 +28,16 @@ def set_price(): #sale window top left corner
     pag.click()
     pag.click(480, 39) #select all
     pag.click(org_pos) #item
-    #time.sleep(0.15)
+    time.sleep(0.1)
     pag.click(1052, 372)
     pag.click(996, 199)
 
 def quick_sell(): #sale window top left corner
     pag.click(971, 897)
     pag.click(892, 747)
+    time.sleep(0.5)
     pag.click(1228, 78)
+    pag.moveTo(302, 405)
    
 
 def change_pos(x, y):
