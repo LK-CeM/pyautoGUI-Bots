@@ -40,7 +40,7 @@ def set_price(): #sale window top left corner
     pag.click(button='right')
     pag.moveTo(pag.locateOnScreen('./imgs/filter_by_item.png', confidence=0.8))
     pag.click()
-    if (pag.locateOnScreen('./imgs/autoselect_off.png', confidence=0.9)):
+    if (pag.locateOnScreen('./imgs/autoselect_off.png', confidence=0.95, grayscale=False)):
         pag.click(485, 45) #select all
     pag.click(org_pos) #item
     time.sleep(0.6)
