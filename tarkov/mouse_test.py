@@ -4,7 +4,7 @@ import sys
 import keyboard
 import win32gui, win32ui, win32con, win32api
 
-
+#run game in borderless
 
 def main(argv):
     while(True):
@@ -38,7 +38,12 @@ def snipe(): #1777 180
 def set_price(): #sale window top left corner
     org_pos = pag.position()
     pag.click(button='right')
-    pag.moveTo(pag.locateOnScreen('./imgs/filter_by_item.png', confidence=0.8))
+    filter = None
+    while (filter == None):
+        pag.screenshot('num1_.png')
+        filter = pag.locateOnScreen('./imgs/filter_by_item.png', confidence=0.9)
+    print(filter)
+    pag.moveTo(filter)
     
     pag.click()
     if (pag.locateOnScreen('./imgs/autoselect_off.png', confidence=0.95, grayscale=True)):
@@ -55,7 +60,8 @@ def quick_sell(): #sale window top left corner
     time.sleep(0.5)
     pag.click(1228, 78)
     pag.moveTo(302, 405)
-    pos = pag.locateOnScreen('./imgs/found_in_raid.png', confidence=0.8)
+    time.sleep(1)
+    pos = pag.locateOnScreen('./imgs/found_in_raid.png', confidence=0.8, grayscale=True)
     pag.moveTo(pos)
     if (pos):
         set_price()
