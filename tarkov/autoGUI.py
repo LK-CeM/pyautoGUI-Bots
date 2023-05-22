@@ -16,9 +16,9 @@ def main(argv):
             exit() 
         elif (keyboard.is_pressed('e') and keyboard.is_pressed('alt')):
             repair() #macro repair
-        elif (keyboard.is_pressed('s') and keyboard.is_pressed('alt')):
+        elif ((keyboard.is_pressed('d') and keyboard.is_pressed('alt')) or keyboard.is_pressed('/')):
             set_price()
-        elif (keyboard.is_pressed('d') and keyboard.is_pressed('alt')):
+        elif ((keyboard.is_pressed('s') and keyboard.is_pressed('alt')) or keyboard.is_pressed('*')):
             quick_sell()
         elif (keyboard.is_pressed('v') and keyboard.is_pressed('alt')):
             snipe()
@@ -32,7 +32,7 @@ def snipe(): #1777 180
             pag.moveTo(111, 111)
             pag.press("f5")
             continue
-        time.sleep(1)
+        time.sleep(0.1)
         pag.press("f5")
 
 def set_price(): #sale window top left corner
@@ -48,7 +48,7 @@ def set_price(): #sale window top left corner
     pag.click()
     if (pag.locateOnScreen('./imgs/autoselect_off.png', confidence=0.95, grayscale=True)):
         pag.click(485, 45) #select all
-        time.sleep(1)
+        time.sleep(0.5)
     pag.click(org_pos) #item
     time.sleep(0.6)
     pag.click(1052, 372)
