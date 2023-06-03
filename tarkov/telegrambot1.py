@@ -20,8 +20,8 @@ def is_image_on_screen():
 
 
 
-# Telegram bot token
-TOKEN = '6076055331:AAEPdQU7i0FnZymQPSoaVdKGEysa_QkP0-4'
+
+
 
 # Create an instance of the Telegram Bot
 bot = telegram.Bot(token=TOKEN)
