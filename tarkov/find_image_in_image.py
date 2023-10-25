@@ -4,6 +4,8 @@ import cv2
 import numpy as np
 import pyautogui as pag
 
+
+count_dic = {}
 # Function to load images from a folder
 def load_images_from_folder(folder_path):
     image_list = []
@@ -70,7 +72,6 @@ if max_val > 0.8:
 
 # Assuming you have a list of item templates (item_images) and a dictionary to keep track of counts
 item_images = load_images_from_folder(items_folder)
-count_dic = {}
 
 for i in range(grid_size):
     for j in range(grid_size):
@@ -105,11 +106,12 @@ for item, count in sorted_count_dic.items():
 
 # Display the cell content of the top 3 matches by count
 top_3_items = list(sorted_count_dic.keys())[:3]
+
 for item in top_3_items:
+    item = int(item)
     cv2.imshow(f"Top Match Item {item}", item_images[item])
 
 cv2.destroyAllWindows()
-
 # Combine the top 3 items into one image
 top_3_images = [item_images[item] for item in top_3_items]
 combined_image = np.hstack(top_3_images)  # Horizontal stacking
